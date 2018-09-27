@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+</head>
+
+<body>
+    <a href="shop_car.html">跳转到购物车</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>编号</th>
+                <th>商品名称</th>
+                <th>单价</th>
+                <th>颜色</th>
+                <th>购买数量</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody class="tbox">
+            
+        </tbody>
+    </table>
+    <!-- <script src="json/shop.json"></script> -->
+    <script>
+        // 把商品渲染到页面中
+        // 用户可以点击添加购物车
+        // 最后跳转到购物车页面,刚才加入购物车的商品就可以展示到页面中
+        var $tbox = document.querySelector('.tbox');
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'json/shop.json', true);
+        xhr.send(null);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var data = JSON.parse(xhr.responseText);
+                fn(data);
+            }
+        }
+        function fn(a) {
+            // console.log(a);
+            for(var i = 0;i<a.length;i++){
+                // console.log(a[i]);
+                var $tr = document.createElement('tr');
+                $tbox.appendChild($tr);
+                for(var j in a[i]){
+                    var $td = document.createElement('td');
+                    $tr.appendChild($td);
+                    var $text = document.createTextNode(a[i][j]);
+                    $td.appendChild($text);
+                }
+                var $inp = document.createElement('input');
+                var $but = document.createElement('button');
+                var $td = document.createElement('td');
+                $tr.appendChild($td);
+                $td.appendChild($inp);
+                var $td = document.createElement('td');
+                $tr.appendChild($td);
+                $td.appendChild($but);
+                var $_but = document.createTextNode('加入购物车');
+                $but.appendChild($_but);
+            }
+            $tbox.onclick = function(ev){
+                ev = ev || window.event;
+                var target = ev.target || ev.srcElement;
+                if(target.nodeName == 'BUTTON' && target.parentNode.parentNode.nodeName == 'TR'){
+                    // console.log(target.innerHTML);
+                    var $_tr = target.parentNode.parentNode;
+                    // console.log($_tr)
+                    document.cookie = $_tr;
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>
